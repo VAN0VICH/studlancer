@@ -1,11 +1,30 @@
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
-export const authRouter = createTRPCRouter({
-  getSession: publicProcedure.query(({ ctx }) => {
-    return ctx.session;
-  }),
-  getSecretMessage: protectedProcedure.query(() => {
-    // testing type validation of overridden next-auth Session in @acme/auth package
-    return "you can see this secret message!";
-  }),
-});
+export {}
+// import { clerkClient } from "@clerk/nextjs";
+
+// import { createTRPCRouter, protectedProcedure } from "../trpc";
+
+// export const authRouter = createTRPCRouter({
+//   mySubscription: protectedProcedure.query(async (opts) => {
+//     const customer = await opts.ctx.db
+//       .selectFrom("Customer")
+//       .select(["plan", "endsAt"])
+//       .where("clerkUserId", "=", opts.ctx.auth.userId)
+//       .executeTakeFirst();
+
+//     if (!customer) return null;
+
+//     return { plan: customer.plan ?? null, endsAt: customer.endsAt ?? null };
+//   }),
+//   listOrganizations: protectedProcedure.query(async (opts) => {
+//     const memberships = await clerkClient.users.getOrganizationMembershipList({
+//       userId: opts.ctx.auth.userId,
+//     });
+
+//     return memberships.map(({ organization }) => ({
+//       id: organization.id,
+//       name: organization.name,
+//       image: organization.imageUrl,
+//     }));
+//   }),
+// // });
