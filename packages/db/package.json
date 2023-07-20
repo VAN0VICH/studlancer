@@ -11,8 +11,7 @@
     "dev": "pnpm with-env prisma studio --port 5556",
     "with-env": "dotenv -e ../../.env --"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "dotenv-cli": "^7.2.1",
     "typescript": "^5.1.6"

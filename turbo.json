@@ -8,9 +8,11 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", ".expo/**"]
+      "outputs": [".next/**", ".expo/**", "dist/**"]
     },
-    "lint": {},
+    "lint": {
+      "dependsOn": ["build"]
+    },
     "lint:fix": {},
     "clean": {
       "cache": false
@@ -19,6 +21,7 @@
       "cache": false
     },
     "type-check": {
+      "dependsOn": ["build"],
       "cache": false
     }
   },
