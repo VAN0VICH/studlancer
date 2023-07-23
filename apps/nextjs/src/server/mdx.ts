@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 "server-only";
+
 import { serialize } from "next-mdx-remote/serialize";
 import { visit } from "unist-util-visit";
-import { contentKey } from "~/repl/client/mutators/workspace";
+
 export async function getPublishedContent(id: string) {
   // const params: GetCommandInput = {
   //   TableName: env.MAIN_TABLE_NAME,
@@ -14,7 +15,7 @@ export async function getPublishedContent(id: string) {
     // if (result.Item) {
     //   return result.Item as PublishedContent;
     // }
-  
+
     return null;
   } catch (error) {
     console.log(error);
