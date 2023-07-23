@@ -14,7 +14,13 @@ import { questStatus, WorkType } from "@acme/types";
 
 import { Topics } from "../constants";
 import { Post } from "./post";
-import { Solution, solution, SolutionSchema } from "./solution";
+import {
+  Solution,
+  solution,
+  SolutionSchema,
+  WorkEnum,
+  Works,
+} from "./solution";
 import { user, UserSchema } from "./user";
 
 export const quest = sqliteTable(
@@ -39,6 +45,8 @@ export const quest = sqliteTable(
     allow_unpublish: integer("allow_unpublish", { mode: "boolean" }),
     solvers_count: integer("solvers_count", { mode: "number" }),
     status: text("status", { enum: questStatus }),
+    type: text("type", { enum: Works }).notNull(),
+    winner_id: text("winner_id"),
   },
   (works) => ({
     creatorIdx: uniqueIndex("creatorIdx").on(works.creator_id),
@@ -52,6 +60,10 @@ export const questRelations = relations(quest, ({ one, many }) => ({
     references: [user.id],
   }),
   solvers: many(solver),
+  winner: one(user, {
+    fields: [quest.winner_id],
+    references: [user.id],
+  }),
 }));
 export const solver = sqliteTable(
   "solver",
@@ -113,7 +125,7 @@ export const PublishedQuestSchema = QuestSchema.required({
   deadline: true,
   slots: true,
   reward: true,
-});
+}).extend({ creator: UserSchema, winner: UserSchema });
 
 export type PublishedQuest = z.infer<typeof PublishedQuestSchema>;
 export type Work = (Post & Quest & Solution) & {

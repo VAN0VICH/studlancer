@@ -35,6 +35,8 @@ export const solution = sqliteTable(
     last_updated: text("last_updated"),
     target_quest_id: text("solution_id"),
     status: text("status", { enum: solutionStatus }),
+
+    type:text("type", { enum:Works}).notNull()
   },
   (solution) => ({
     creatorIdx: uniqueIndex("creatorIdx").on(solution.creator_id),

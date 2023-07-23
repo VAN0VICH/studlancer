@@ -255,12 +255,12 @@ export default function QuestPage({
                     {
                       "bg-yellow-400": status === "posted",
                       "bg-green-400 dark:bg-emerald-400":
-                        status === "ACCEPTED" || status === "ACKNOWLEDGED",
-                      "bg-red-400 dark:bg-red-500": status === "REJECTED",
+                        status === "accepted" || status === "acknowledged",
+                      "bg-red-400 dark:bg-red-500": status === "rejected",
                     },
                   )}
                 >
-                  {status === "ACCEPTED" && (
+                  {status === "accepted" && (
                     <Check className="font-extrabold text-white" />
                   )}
                 </div>

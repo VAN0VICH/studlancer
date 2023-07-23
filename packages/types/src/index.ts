@@ -115,7 +115,13 @@ export const userKey = (id: string) => {
 export const acknowledged = "acknowledged" as const;
 export const accepted = "accepted" as const;
 export const rejected = "rejected" as const;
-export const solutionStatus = [accepted, acknowledged, rejected] as const;
+export const posted = "posted" as const;
+export const solutionStatus = [
+  accepted,
+  acknowledged,
+  rejected,
+  posted,
+] as const;
 export const open = "open" as const;
 export const closed = "closed" as const;
 export const questStatus = ["open", "closed"] as const;

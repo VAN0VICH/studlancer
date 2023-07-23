@@ -9,7 +9,7 @@ import {
 import { createInsertSchema } from "drizzle-zod";
 
 import { PostDestination, Topics } from "../constants";
-import { collaborator } from "./solution";
+import { collaborator, Works } from "./solution";
 import { user } from "./user";
 
 export const post = sqliteTable(
@@ -30,6 +30,8 @@ export const post = sqliteTable(
     last_updated: text("last_updated"),
     destination: text("destination", { enum: PostDestination }),
     like: integer("like", { mode: "number" }).default(0),
+
+    type: text("type", { enum: Works }).notNull(),
   },
   (works) => ({
     creatorIdx: uniqueIndex("creatorIdx").on(works.creator_id),
