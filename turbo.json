@@ -6,10 +6,7 @@
       "inputs": ["schema/*"],
       "cache": false
     },
-    "db:push": {
-      "inputs": ["schema/*"],
-      "cache": false
-    },
+
     "dev": {
       "persistent": true,
       "cache": false

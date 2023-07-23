@@ -1,18 +1,18 @@
 import { EditorView } from "@tiptap/pm/view";
 // import { BlobResult } from "@vercel/blob";
 import { toast } from "sonner";
-import { ExpandedRouteConfig } from "~/types/file-types";
+
+import { ExpandedRouteConfig } from "@acme/types";
 
 export const handleImageUpload = ({
   res,
   view,
   event,
 }: {
-  res:
-    | {
-        fileUrl: string;
-        fileKey: string;
-      }[];
+  res: {
+    fileUrl: string;
+    fileKey: string;
+  }[];
 
   view: EditorView;
   event: ClipboardEvent | DragEvent | React.ChangeEvent<HTMLInputElement>;
@@ -35,8 +35,8 @@ export const handleImageUpload = ({
             src: fileUrl,
             alt: fileKey,
             title: fileKey,
-          })
-        )
+          }),
+        ),
       );
 
       // for drag and drop events
@@ -63,8 +63,8 @@ export const handleImageUpload = ({
             src: fileUrl,
             alt: fileKey,
             title: fileKey,
-          })
-        )
+          }),
+        ),
       );
     }
   };
@@ -118,7 +118,7 @@ const INTERNAL_doFormatting = (config?: ExpandedRouteConfig): string => {
 };
 
 const allowedContentTextLabelGenerator = (
-  config?: ExpandedRouteConfig
+  config?: ExpandedRouteConfig,
 ): string => {
   return capitalizeStart(INTERNAL_doFormatting(config));
 };

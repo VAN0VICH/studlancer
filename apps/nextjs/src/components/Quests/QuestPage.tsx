@@ -9,8 +9,8 @@ import { MDXRemoteProps } from "next-mdx-remote";
 import { useSubscribe } from "replicache-react";
 import { toast } from "sonner";
 
-import type { PublishedQuest, Solver } from "@acme/db";
-import { solutionStatus, userKey } from "@acme/types";
+import type { PublishedQuest, Solver, User } from "@acme/db";
+import { solutionStatus, userKey, workKey } from "@acme/types";
 
 import { cn } from "~/utils/cn";
 import { NonEditableQuestAttributes } from "~/components/Workspace/NonEditableAttributes";
@@ -52,7 +52,7 @@ export default function QuestPage({
   const quest = useSubscribe(
     rep,
     async (tx) => {
-      const quest = await tx.get(workKey({ id, type: "QUEST" }));
+      const quest = await tx.get(workKey(id, "QUEST"));
       if (quest) {
         return quest as PublishedQuest;
       }
@@ -75,7 +75,7 @@ export default function QuestPage({
     [],
   );
 
-  const isCreator = userId === quest?.creatorId;
+  const isCreator = userId === quest?.creator_id;
 
   const solvers = useSubscribe(
     rep,
@@ -129,7 +129,7 @@ export default function QuestPage({
           rep.mutate.leaveQuest({
             userId,
             questId: id,
-            publisherId: quest.creatorId,
+            publisherId: quest.creator_id,
           }),
         undo: () =>
           rep.mutate.joinQuest({
@@ -138,7 +138,7 @@ export default function QuestPage({
             level: user.level,
 
             ...(user.profile && { profile: user.profile }),
-            publisherId: quest.creatorId,
+            publisherId: quest.creator_id,
             username: user.username,
           }),
       });
@@ -168,7 +168,7 @@ export default function QuestPage({
             </Button>
           </div>
 
-          {quest.winnerId && <Winner winnerId="user1" />}
+          {quest.winner_id && <Winner winnerId="user1" />}
         </div>
 
         <div className="w-full md:w-9/12">
@@ -414,7 +414,7 @@ const SolverComponent = ({
           <div className="flex" key={s.user.id}>
             <Solver
               solver={s}
-              isAuthorised={userId === creatorId || userId === s.id}
+              isAuthorised={userId === creatorId || userId === s.user.id}
               questId={questId}
             />
           </div>

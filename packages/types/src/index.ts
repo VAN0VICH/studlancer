@@ -1,6 +1,8 @@
 import { ClientID, PatchOperation } from "replicache";
 import z from "zod";
 
+export * from "./file-types";
+export * from "./mime-types";
 export const TableNameSchema = z.enum([
   "user",
   "quest",
