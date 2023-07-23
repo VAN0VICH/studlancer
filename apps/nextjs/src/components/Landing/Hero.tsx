@@ -1,7 +1,9 @@
+import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ReactNode } from "react";
+
 import { Button } from "~/ui/Button";
+
 // import heroImg from "../public/img/hero.png";
 
 const Hero = ({ children }: { children: ReactNode }) => {
@@ -23,14 +25,14 @@ const Hero = ({ children }: { children: ReactNode }) => {
 
             <div className="flex flex-col gap-3">
               <Link href="/quests">
-                <Button className="rounded-md bg-blue-9 px-8 py-4  text-lg font-medium text-white hover:bg-blue-10">
+                <Button className="bg-blue-9 hover:bg-blue-10 rounded-md px-8  py-4 text-lg font-medium text-white">
                   Explore
                 </Button>
               </Link>
             </div>
           </div>
         </div>
-        <div className="al lg:w-3/7 flex h-screen w-full items-baseline justify-center lg:items-center ">
+        <div className="al lg:w-3/7 flex h-screen w-full items-baseline justify-end lg:items-center ">
           {children}
         </div>
       </div>
