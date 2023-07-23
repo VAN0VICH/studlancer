@@ -29,8 +29,7 @@ import { Replicache } from "replicache";
 import { useSubscribe } from "replicache-react";
 import { ulid } from "ulid";
 
-import { Quest } from "@acme/db";
-import { Solution } from "@acme/db/src/schema/solution";
+import { Post, Quest , Solution, Work} from "@acme/db";
 
 import { cn } from "~/utils/cn";
 import {
@@ -61,6 +60,7 @@ import {
 } from "~/ui/Dropdown";
 import { ScrollArea } from "~/ui/ScrollArea";
 import { Tabs, TabsList, TabsTrigger } from "~/ui/Tabs";
+import { WorkType } from "@acme/types";
 
 export default function List({
   showList,
@@ -78,7 +78,7 @@ export default function List({
   const quests: Quest[] = [];
   const solutions: Solution[] = [];
   const posts: Post[] = [];
-  const trash: MergedWork[] = [];
+  const trash: Work[] = [];
   const router = useRouter();
   const { id: routerId } = useParams();
   const [type, setType] = useState<WorkType>("QUEST");
@@ -96,13 +96,13 @@ export default function List({
   if (works) {
     for (const [key, value] of works) {
       const work = value as Post & Solution & Quest;
-      if (work.type === "QUEST" && !work.inTrash) {
+      if (work.type === "QUEST" && !work.in_trash) {
         quests.push(work);
-      } else if (work.type === "SOLUTION" && !work.inTrash) {
+      } else if (work.type === "SOLUTION" && !work.in_trash) {
         solutions.push(work);
-      } else if (work.type === "POST" && !work.inTrash) {
+      } else if (work.type === "POST" && !work.in_trash) {
         posts.push(work as Post);
-      } else if (work.inTrash) {
+      } else if (work.in_trash) {
         trash.push(work);
       }
     }
@@ -115,10 +115,9 @@ export default function List({
 
       const newQuest: Quest = {
         id,
-        createdAt,
+        created_at,
         creatorId: userId,
         inTrash: false,
-        lastUpdated: createdAt,
         published: false,
         type: "QUEST",
         version: 1,
@@ -126,7 +125,7 @@ export default function List({
       await undoManagerRef.current.add({
         execute: () =>
           rep.mutate.createWork({
-            work: newQuest as MergedWork,
+            work: newQuest as Work,
             type: "QUEST",
           }),
         undo: () => rep.mutate.deleteWork({ id: newQuest.id, type: "QUEST" }),
@@ -313,7 +312,7 @@ const Items = ({
                 handleDeleteWork={handleDeleteWork}
                 router={router}
                 segment={segment}
-                work={work as MergedWork}
+                work={work as Work}
                 key={work.id}
               />
             );
@@ -343,7 +342,7 @@ const Item = ({
   handleDeleteWork,
 }: {
   router: AppRouterInstance;
-  work: MergedWork;
+  work: Work;
   segment: string;
   handleDeleteWork: ({
     id,
@@ -401,7 +400,7 @@ const TrashItem = ({
   handleRestoreWork,
   handlePermDeleteWork,
 }: {
-  work: MergedWork;
+  work: Work;
   handleRestoreWork: ({
     id,
     type,
@@ -468,7 +467,7 @@ const TrashComponent = ({
   handleRestoreWork,
   handlePermDeleteWork,
 }: {
-  trash: MergedWork[];
+  trash: Work[];
   handleRestoreWork: ({
     id,
     type,

@@ -1,15 +1,16 @@
 "use client";
-import { useAuth } from "@clerk/nextjs";
-import Pusher from "pusher-js";
+
 import { ReactNode, useEffect, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
+import { ArrowBigRightDash } from "lucide-react";
 import { Replicache } from "replicache";
-import { env } from "~/env.mjs";
-import { wokrspaceMutators } from "~/repl/client/mutators/workspace";
-import { Button } from "~/ui/Button";
+
 import { STRANGER, WORKSPACE } from "~/utils/constants";
+import { env } from "~/env.mjs";
+import { Button } from "~/ui/Button";
 import { WorkspaceStore } from "~/zustand/workspace";
 import List from "./List";
-import { ArrowBigRightDash } from "lucide-react";
+
 export default function ListComponent({ children }: { children: ReactNode }) {
   const [showList, toggleShowList] = useState(true);
   const rep = WorkspaceStore((state) => state.rep);
@@ -21,7 +22,7 @@ export default function ListComponent({ children }: { children: ReactNode }) {
   };
   useEffect(() => {
     const showList = JSON.parse(
-      localStorage.getItem("workspaceList") as string
+      localStorage.getItem("workspaceList") as string,
     ) as boolean | undefined | null;
     if (showList !== null && showList !== undefined) {
       toggleShowList(showList);
@@ -39,25 +40,11 @@ export default function ListComponent({ children }: { children: ReactNode }) {
       licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
       pushURL: `/api/replicache-push?spaceId=${WORKSPACE}`,
       pullURL: `/api/replicache-pull?spaceId=${WORKSPACE}`,
-      mutators: wokrspaceMutators,
+      mutators: workspaceMutators,
       pullInterval: null,
     });
     setRep(r);
-    if (env.NEXT_PUBLIC_PUSHER_KEY && env.NEXT_PUBLIC_PUSHER_CLUSTER) {
-      Pusher.logToConsole = true;
-      const pusher = new Pusher(env.NEXT_PUBLIC_PUSHER_KEY, {
-        cluster: env.NEXT_PUBLIC_PUSHER_CLUSTER,
-      });
 
-      const channel = pusher.subscribe(
-        // `${WORKSPACE}${userId ? userId : STRANGER}`
-        WORKSPACE
-      );
-      channel.bind("poke", async (data: string) => {
-        const clientGroupId = await r.clientGroupID;
-        if (clientGroupId !== data) r.pull();
-      });
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rep, userId]);
 
@@ -72,7 +59,7 @@ export default function ListComponent({ children }: { children: ReactNode }) {
       <div className={`workspaceContainer ${showList ? "adjust" : ""}`}>
         {!showList ? (
           <Button
-            className="absolute z-30 m-2 bg-blue-4 hover:bg-blue-5"
+            className="bg-blue-4 hover:bg-blue-5 absolute z-30 m-2"
             aria-label="open list"
             size="icon"
             onClick={() => toggle()}
