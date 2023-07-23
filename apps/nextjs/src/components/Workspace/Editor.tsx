@@ -3,7 +3,6 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useRef } from "react";
-import { MergedWork, WorkType } from "~/types/types";
 import {
   NonEditableQuestAttributes,
   NonEditableSolutionAttributes,
@@ -34,7 +33,8 @@ const TiptapEditor = dynamic(() => import("../Tiptap/TiptapEditor"), {
 import { useAuth } from "@clerk/nextjs";
 import { toast } from "sonner";
 import * as Y from "yjs";
-import { workKey } from "~/repl/client/mutators/workspace";
+import { WorkType, workKey } from "@acme/types";
+import { Work } from "@acme/db";
 
 const Editor = ({ id }: { id: string }) => {
   const { userId } = useAuth();
@@ -44,14 +44,14 @@ const Editor = ({ id }: { id: string }) => {
   const work = useSubscribe(
     rep,
     async (tx) => {
-      const editor = (await tx.get(workKey({ id, type }))) || null;
+      const editor = (await tx.get(workKey( id, type ))) || null;
 
       return editor;
     },
 
     null,
     [id]
-  ) as MergedWork;
+  ) as Work;
 
   const ydocRef = useRef(new Y.Doc());
   const ydoc = ydocRef.current;
@@ -83,7 +83,7 @@ const Editor = ({ id }: { id: string }) => {
           <TiptapEditor
             id={id}
             ydoc={ydoc}
-            isCreator={userId === work.creatorId}
+            isCreator={userId === work.creator_id}
             work={work}
           />
         )}
@@ -91,7 +91,7 @@ const Editor = ({ id }: { id: string }) => {
 
       {work && work.published && (
         <div className="mt-3 flex gap-5">
-          {work.creatorId && userId && (
+          {work.creator_id && userId && (
             <>
               <AlertDialog>
                 <AlertDialogTrigger asChild>

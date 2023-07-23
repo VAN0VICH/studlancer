@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
+import { ChangeEvent, startTransition, useEffect, useState } from "react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { format } from "date-fns";
 import { CalendarIcon, Gem, Users2 } from "lucide-react";
-import { ChangeEvent, startTransition, useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import { SubtopicSuggestion, Topic, Topics } from "~/types/types";
+
+import { SubtopicSuggestion, Topic, Topics } from "@acme/types";
+
+import { cn } from "~/utils/cn";
 import { Button } from "~/ui/Button";
 import { Calendar } from "~/ui/Calendar";
 import { Input } from "~/ui/Input";
@@ -17,8 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/ui/Select";
-import { cn } from "~/utils/cn";
 import { AttributeError } from "~/zustand/workspace";
+
 export const Title = ({
   title,
   placeholder,
@@ -34,7 +37,7 @@ export const Title = ({
 
   return (
     <div
-      className="prose prose-stone  w-full border-red-100 dark:prose-invert "
+      className="prose prose-stone  dark:prose-invert w-full border-red-100 "
       ref={parent}
     >
       <TextareaAutosize
@@ -46,7 +49,7 @@ export const Title = ({
         onInput={(e) => handleTitleChange(e.currentTarget.value)}
         className={cn(
           "w-full resize-none appearance-none overflow-hidden rounded-md bg-transparent text-4xl font-bold focus:outline-none",
-          { "rounded-md border-[1px] border-red-500": error.error }
+          { "rounded-md border-[1px] border-red-500": error.error },
         )}
         // {...register("title")}
       />
@@ -84,7 +87,7 @@ export const TopicSelect = ({
         }}
         value={topic}
       >
-        <SelectTrigger className="w-[180px] dark:border-[1px] dark:border-slate-6 dark:bg-slate-3 dark:outline-white">
+        <SelectTrigger className="dark:border-slate-6 dark:bg-slate-3 w-[180px] dark:border-[1px] dark:outline-white">
           <SelectValue placeholder="Select topic" />
         </SelectTrigger>
         <SelectContent>
@@ -142,7 +145,7 @@ export const Subtopic = ({
 }) => {
   const [parent, enableAnimations] = useAutoAnimate(/* optional config */);
   const [subtopicState, setSubtopicState] = useState<OptionType[] | null>(
-    subtopic ? subtopic.map((v) => ({ value: v, label: v })) : []
+    subtopic ? subtopic.map((v) => ({ value: v, label: v })) : [],
   );
   function arraysEqual(a: string[], b: string[]) {
     if (a.length !== b.length) return false;
@@ -168,14 +171,14 @@ export const Subtopic = ({
         subtopicState &&
         arraysEqual(
           subtopic,
-          subtopicState.map((val) => val.value)
+          subtopicState.map((val) => val.value),
         )
       )
         return;
       if (subtopicState) {
         console.log("mutating");
         handleSubtopicChange({ subtopics: subtopicState }).catch((error) =>
-          console.log(error)
+          console.log(error),
         );
       }
     });
@@ -324,8 +327,8 @@ export const DatePicker = ({
           <Button
             variant={"outline"}
             className={cn(
-              "w-full justify-start text-left font-normal dark:border-[1px] dark:border-slate-6 dark:bg-slate-3 md:w-[280px]",
-              !dateState && "text-muted-foreground"
+              "dark:border-slate-6 dark:bg-slate-3 w-full justify-start text-left font-normal dark:border-[1px] md:w-[280px]",
+              !dateState && "text-muted-foreground",
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -336,7 +339,7 @@ export const DatePicker = ({
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0 dark:border-slate-6 ">
+        <PopoverContent className="dark:border-slate-6 w-auto p-0 ">
           <Calendar
             mode="single"
             selected={dateState}

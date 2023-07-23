@@ -9,6 +9,8 @@ import {post } from "./schema/post"
 import {solution } from "./schema/solution"
 
 export * from "./schema/quest";
+export * from "./schema/Post";
+export * from "./schema/Solution";
 export * from "./schema/user";
 export * from "./types";
 export * from "./query/user";

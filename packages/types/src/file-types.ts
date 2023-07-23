@@ -1,5 +1,7 @@
-import { MimeType, mimeTypes } from "./mime-types";
 import * as z from "zod";
+
+import { MimeType, mimeTypes } from "./mime-types";
+
 export const ALLOWED_FILE_TYPES = [
   "image",
   "video",
@@ -12,7 +14,7 @@ export const ALLOWED_FILE_TYPES = [
 export type AllowedFileType = (typeof ALLOWED_FILE_TYPES)[number];
 
 function zodEnumFromObjKeys<K extends string>(
-  obj: Record<K, any>
+  obj: Record<K, any>,
 ): z.ZodEnum<[K, ...K[]]> {
   const [firstKey, ...otherKeys] = Object.keys(obj) as K[];
   return z.enum([firstKey!, ...otherKeys]);

@@ -96,8 +96,11 @@ export const solverRelations = relations(solver, ({ one }) => ({
   }),
 }));
 
-export type Quest = InferModel<typeof quest>;
+export type InferedQuest = InferModel<typeof quest>;
+
 export const QuestSchema = createInsertSchema(quest);
+export type Quest = z.infer<typeof QuestSchema>;
+
 export const UpdateQuestSchema = QuestSchema.pick({
   title: true,
   topic: true,

@@ -88,6 +88,7 @@
     "tippy.js": "^6.3.7",
     "tiptap-markdown": "^0.8.1",
     "ulid": "^2.3.0",
+    "y-partykit": "0.0.0-fd49ef8",
     "yjs": "^13.6.4",
     "zod": "^3.21.4",
     "zustand": "^4.3.8"
@@ -95,6 +96,7 @@
   "devDependencies": {
     "@acme/eslint-config": "^0.2.0",
     "@acme/tailwind-config": "^0.1.0",
+    "@types/lodash.debounce": "^4.0.7",
     "@types/node": "^18.16.19",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",

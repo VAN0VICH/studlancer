@@ -1,42 +1,43 @@
-import Collaboration from "@tiptap/extension-collaboration";
-import { EditorContent, useEditor } from "@tiptap/react";
-import * as base64 from "base64-js";
-import debounce from "lodash.debounce";
 import {
   Dispatch,
-  SetStateAction,
   memo,
+  SetStateAction,
   useCallback,
   useEffect,
   useRef,
 } from "react";
+import { useAuth } from "@clerk/nextjs";
+import Collaboration from "@tiptap/extension-collaboration";
+import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
+import { EditorContent, useEditor } from "@tiptap/react";
+import * as base64 from "base64-js";
+import debounce from "lodash.debounce";
+import PartySocket from "partysocket";
+import { useSubscribe } from "replicache-react";
 import { toast } from "sonner";
+import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
+
+import { User, Work } from "@acme/db";
+import { userKey } from "@acme/types";
+
+import { STRANGER } from "~/utils/constants";
 import { useUploadThing } from "~/utils/useUploadThing";
+import { env } from "~/env.mjs";
 import { WorkspaceStore } from "~/zustand/workspace";
+import Publish from "../Workspace/Publish";
 import { EditorBubbleMenu } from "./components/BubleMenu";
 import { TiptapExtensions } from "./extensions";
-import { MergedWork, User } from "~/types/types";
-import Publish from "../Workspace/Publish";
-
-import YPartyKitProvider from "y-partykit/provider";
 import {
   getRandomColor,
   useConnection,
   useConnectionStatus,
 } from "./extensions/collaboration";
-import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
-import { useAuth } from "@clerk/nextjs";
-import { userKey } from "~/repl/client/mutators/user";
-import { useSubscribe } from "replicache-react";
-import PartySocket from "partysocket";
-import { STRANGER } from "~/utils/constants";
-import { env } from "~/env.mjs";
 
 const TiptapEditor = (props: {
   id: string;
   ydoc: Y.Doc;
-  work: MergedWork;
+  work: Work;
   isCreator: boolean;
 }) => {
   const { id, ydoc, isCreator, work } = props;
@@ -54,12 +55,12 @@ const TiptapEditor = (props: {
     },
 
     null,
-    []
+    [],
   ) as User | null;
   const yProviderRef = useRef(
     new YPartyKitProvider(env.NEXT_PUBLIC_YJS_PARTYKIT_URL, id, ydoc, {
       connect: false,
-    })
+    }),
   );
 
   const yProvider = yProviderRef.current;
@@ -112,8 +113,8 @@ const TiptapEditor = (props: {
                             src: fileUrl,
                             alt: fileKey,
                             title: fileKey,
-                          })
-                        )
+                          }),
+                        ),
                       );
                     }
                   }
@@ -148,7 +149,7 @@ const TiptapEditor = (props: {
                       }); // creates the image element
                       const transaction = view.state.tr.insert(
                         coordinates?.pos || 0,
-                        node
+                        node,
                       ); // places it in the correct position
 
                       toast.success("Image successfully uploaded");
@@ -178,7 +179,7 @@ const TiptapEditor = (props: {
       ],
       editable: !work.published,
     },
-    [id]
+    [id],
   );
   useEffect(() => {
     if (isUploading) {
@@ -198,7 +199,7 @@ const TiptapEditor = (props: {
           <EditorContent
             editor={editor}
             id="editor"
-            className="min-h-[500px] font-default"
+            className="font-default min-h-[500px]"
           />
           {editor.isEditable && <EditorBubbleMenu editor={editor} />}
           <footer className="bottom-8 flex flex-row items-center text-sm">

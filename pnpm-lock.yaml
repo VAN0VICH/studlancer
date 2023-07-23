@@ -351,6 +351,9 @@ importers:
       ulid:
         specifier: ^2.3.0
         version: 2.3.0
+      y-partykit:
+        specifier: 0.0.0-fd49ef8
+        version: 0.0.0-fd49ef8
       yjs:
         specifier: ^13.6.4
         version: 13.6.7
@@ -367,6 +370,9 @@ importers:
       '@acme/tailwind-config':
         specifier: ^0.1.0
         version: link:../../packages/config/tailwind
+      '@types/lodash.debounce':
+        specifier: ^4.0.7
+        version: 4.0.7
       '@types/node':
         specifier: ^18.16.19
         version: 18.16.20
@@ -5679,6 +5685,16 @@ packages:
   /@types/linkify-it@3.0.2:
     resolution: {integrity: sha512-HZQYqbiFVWufzCwexrvh694SOim8z2d+xJl5UNamcvQFejLY/2YUtzXHYi3cHdI7PMlS8ejH2slRAOJQ32aNbA==}
     dev: false
+
+  /@types/lodash.debounce@4.0.7:
+    resolution: {integrity: sha512-X1T4wMZ+gT000M2/91SYj0d/7JfeNZ9PeeOldSNoE/lunLeQXKvkmIumI29IaKMotU/ln/McOIvgzZcQ/3TrSA==}
+    dependencies:
+      '@types/lodash': 4.14.195
+    dev: true
+
+  /@types/lodash@4.14.195:
+    resolution: {integrity: sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg==}
+    dev: true
 
   /@types/markdown-it@12.2.3:
     resolution: {integrity: sha512-GKMHFfv3458yYy+v/N8gjufHO6MSZKCOXpZc5GXIWWy8uldwfmPn98vp81gZ5f9SVw8YYBctgfJ22a2d7AOMeQ==}
@@ -14346,6 +14362,15 @@ packages:
   /xtend@4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
     engines: {node: '>=0.4'}
+    dev: false
+
+  /y-partykit@0.0.0-fd49ef8:
+    resolution: {integrity: sha512-5wzqB+qbdTS6I1rYdr9GZMjT7+yFwcldH2kGLBXSH7GeeTNmUcb+haB2kz45+0QjQEdWmRAJzBehcYjE0kaPvA==}
+    dependencies:
+      lib0: 0.2.78
+      lodash.debounce: 4.0.8
+      y-protocols: 1.0.5
+      yjs: 13.6.7
     dev: false
 
   /y-prosemirror@1.0.20(prosemirror-model@1.19.3)(prosemirror-state@1.4.3)(prosemirror-view@1.31.4)(y-protocols@1.0.5)(yjs@13.6.7):

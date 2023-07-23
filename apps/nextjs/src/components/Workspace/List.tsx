@@ -2,82 +2,37 @@
 
 import {
   useCallback,
+  useEffect,
   useRef,
+  useState,
   type Dispatch,
   type SetStateAction,
-  useState,
-  useEffect,
 } from "react";
-
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
+import {
+  useParams,
+  useRouter,
+  useSelectedLayoutSegment,
+} from "next/navigation";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { UndoManager } from "@rocicorp/undo";
 import {
-  Album,
-  ArchiveRestoreIcon,
+  ArrowBigLeftDash,
   BookOpenCheck,
-  ChevronDown,
-  Copy,
-  FileEdit,
-  List as LucidList,
   MoreVertical,
   Plus,
   Trash,
   Trash2,
   Undo2,
 } from "lucide-react";
-import {
-  useParams,
-  useRouter,
-  useSelectedLayoutSegment,
-} from "next/navigation";
 import { Replicache } from "replicache";
 import { useSubscribe } from "replicache-react";
 import { ulid } from "ulid";
-import { WorkspaceMutators } from "~/repl/client/mutators/workspace";
-import {
-  MergedWork,
-  Post,
-  PostListComponent,
-  Quest,
-  Solution,
-  WorkType,
-} from "~/types/types";
-import { Button } from "~/ui/Button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "~/ui/Dropdown";
-import { ScrollArea } from "~/ui/ScrollArea";
+
+import { Quest } from "@acme/db";
+import { Solution } from "@acme/db/src/schema/solution";
+
 import { cn } from "~/utils/cn";
-import { ArrowBigLeftDash } from "lucide-react";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "~/ui/Collapsible";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/ui/Tabs";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/ui/Card";
-import { Label } from "~/ui/label";
-import { Input } from "~/ui/Input";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "~/ui/Dialog";
-import { DialogOverlay } from "@radix-ui/react-dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -89,6 +44,23 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "~/ui/AlertDialog";
+import { Button } from "~/ui/Button";
+import { Card } from "~/ui/Card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/ui/Dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "~/ui/Dropdown";
+import { ScrollArea } from "~/ui/ScrollArea";
+import { Tabs, TabsList, TabsTrigger } from "~/ui/Tabs";
 
 export default function List({
   showList,
@@ -118,7 +90,7 @@ export default function List({
       return list;
     },
     null,
-    []
+    [],
   );
 
   if (works) {
@@ -178,7 +150,7 @@ export default function List({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [rep]
+    [rep],
   );
   const handlePermDeleteWork = useCallback(
     async ({ id, type }: { id: string; type: WorkType }) => {
@@ -187,7 +159,7 @@ export default function List({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [rep]
+    [rep],
   );
   const handleDuplicateWork = useCallback(
     async ({ id, type }: { id: string; type: WorkType }) => {
@@ -208,7 +180,7 @@ export default function List({
         });
       }
     },
-    [rep]
+    [rep],
   );
   const handleRestoreWork = useCallback(
     async ({ id, type }: { id: string; type: WorkType }) => {
@@ -222,7 +194,7 @@ export default function List({
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [rep]
+    [rep],
   );
   return (
     <div className={`listContainer ${showList ? "showList" : ""}`}>
@@ -349,7 +321,7 @@ const Items = ({
       </ul>
       <span
         className={cn(
-          "mx-2 flex cursor-pointer items-center gap-2 rounded-md p-2 text-xs font-normal text-slate-600 hover:bg-blue-4 hover:text-blue-9 "
+          "hover:bg-blue-4 hover:text-blue-9 mx-2 flex cursor-pointer items-center gap-2 rounded-md p-2 text-xs font-normal text-slate-600 ",
           // path === item.href ? "bg-accent" : "transparent",
           // item.disabled && "cursor-not-allowed opacity-80",
         )}
@@ -389,11 +361,11 @@ const Item = ({
       }}
       key={work.id}
       className={cn(
-        "relative mx-1 my-1 flex w-[247px]  cursor-pointer items-center gap-2  rounded-md p-2 text-sm font-normal text-slate-600 hover:bg-blue-4 hover:text-blue-9 dark:text-white",
+        "hover:bg-blue-4 hover:text-blue-9 relative mx-1 my-1  flex w-[247px] cursor-pointer  items-center gap-2 rounded-md p-2 text-sm font-normal text-slate-600 dark:text-white",
 
         {
           "bg-blue-4 text-blue-9": segment === work.id,
-        }
+        },
       )}
     >
       <BookOpenCheck size={20} className="text-blue-9" />
@@ -475,7 +447,7 @@ const TrashItem = ({
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction asChild>
                 <Button
-                  className=" bg-red-9 text-white hover:bg-red-10"
+                  className=" bg-red-9 hover:bg-red-10 text-white"
                   // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   onClick={() =>
                     handlePermDeleteWork({ id: work.id, type: work.type })
@@ -517,7 +489,7 @@ const TrashComponent = ({
       <DialogTrigger>
         <span
           className={cn(
-            " mx-2 flex w-[240px] cursor-pointer items-center gap-2 rounded-md p-2 text-sm font-normal text-slate-600 hover:bg-blue-6  hover:text-blue-9"
+            " hover:bg-blue-6 hover:text-blue-9 mx-2 flex w-[240px] cursor-pointer items-center gap-2 rounded-md p-2 text-sm font-normal  text-slate-600",
             // path === item.href ? "bg-accent" : "transparent",
             // item.disabled && "cursor-not-allowed opacity-80",
           )}
