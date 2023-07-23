@@ -36,15 +36,15 @@ export default function ListComponent({ children }: { children: ReactNode }) {
     if (rep) {
       return;
     }
-    const r = new Replicache({
-      name: `${WORKSPACE}#${userId ? userId : STRANGER}`,
-      licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
-      pushURL: `/api/replicache-push?spaceId=${WORKSPACE}`,
-      pullURL: `/api/replicache-pull?spaceId=${WORKSPACE}`,
-      mutators: wokrspaceMutators,
-      pullInterval: null,
-    });
-    setRep(r);
+    // const r = new Replicache({
+    //   name: `${WORKSPACE}#${userId ? userId : STRANGER}`,
+    //   licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
+    //   pushURL: `/api/replicache-push?spaceId=${WORKSPACE}`,
+    //   pullURL: `/api/replicache-pull?spaceId=${WORKSPACE}`,
+    //   mutators: wokrspaceMutators,
+    //   pullInterval: null,
+    // });
+    // setRep(r);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rep, userId]);
