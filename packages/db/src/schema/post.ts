@@ -7,6 +7,7 @@ import {
   uniqueIndex,
 } from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
+import z from "zod";
 
 import { PostDestination, Topics } from "../constants";
 import { collaborator, Works } from "./solution";
@@ -31,6 +32,8 @@ export const post = sqliteTable(
     destination: text("destination", { enum: PostDestination }),
     like: integer("like", { mode: "number" }).default(0),
 
+    text_content: text("text_content"),
+
     type: text("type", { enum: Works }).notNull(),
   },
   (works) => ({
@@ -48,3 +51,7 @@ export const postRelations = relations(post, ({ one, many }) => ({
 }));
 export type Post = InferModel<typeof post>;
 export const PostSchema = createInsertSchema(post);
+export const PublishedPostSchema = PostSchema.extend({
+  destination: z.enum(PostDestination),
+});
+export type PublishedPost = z.infer<typeof PublishedPostSchema>;

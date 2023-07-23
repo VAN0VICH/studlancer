@@ -2,29 +2,22 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { useDebounce } from "~/hooks/use-debounce";
-import { Button } from "~/ui/Button";
 import { BookOpenCheck, Search } from "lucide-react";
+
+import { PublishedPost, PublishedQuest, User } from "@acme/db";
+
+import { cn } from "~/utils/cn";
+import { globalSearch } from "~/app/_actions/global-search";
+import { useDebounce } from "~/hooks/use-debounce";
+import { Avatar, AvatarFallback, AvatarImage } from "~/ui/Avatar";
+import { Button } from "~/ui/Button";
 import {
   CommandDialog,
   CommandEmpty,
-  CommandGroup,
   CommandInput,
   CommandList,
 } from "~/ui/Commang";
 import { Skeleton } from "~/ui/Sceleton";
-import { CommandItem } from "cmdk";
-import { cn } from "~/utils/cn";
-import { globalSearch } from "~/app/_actions/global-search";
-import { Avatar, AvatarFallback, AvatarImage } from "~/ui/Avatar";
-import Link from "next/link";
-import {
-  PublishedMergedWork,
-  PublishedQuest,
-  User,
-  PublishedPost,
-} from "~/types/types";
-import { TopicColor } from "~/utils/topicsColor";
 
 export default function GlobalSearch() {
   const router = useRouter();
@@ -73,16 +66,16 @@ export default function GlobalSearch() {
     <>
       <Button
         variant="outline"
-        className="relative h-9 w-20 border-[1px] border-slate-200 bg-blue-2 p-0 dark:border-slate-6 dark:bg-slate-3 lg:w-[300px] xl:justify-start xl:px-3 xl:py-2"
+        className="bg-blue-2 dark:border-slate-6 dark:bg-slate-3 relative h-9 w-20 border-[1px] border-slate-200 p-0 lg:w-[300px] xl:justify-start xl:px-3 xl:py-2"
         onClick={() => setIsOpen(true)}
       >
-        <Search className="h-4 w-4 text-blue-9 xl:mr-2" aria-hidden="true" />
-        <span className="hidden text-blue-9 xl:inline-flex">
+        <Search className="text-blue-9 h-4 w-4 xl:mr-2" aria-hidden="true" />
+        <span className="text-blue-9 hidden xl:inline-flex">
           Global search...
         </span>
         <span className="sr-only">Search products</span>
-        <kbd className="pointer-events-none absolute right-1.5 hidden  h-6 select-none items-center gap-1 rounded bg-slate-6 px-1.5 font-mono text-[10px] font-medium text-blue-9 opacity-100 xl:flex">
-          <span className="text-xs text-blue-9">Ctrl</span>K
+        <kbd className="bg-slate-6 text-blue-9 pointer-events-none absolute  right-1.5 hidden h-6 select-none items-center gap-1 rounded px-1.5 font-mono text-[10px] font-medium opacity-100 xl:flex">
+          <span className="text-blue-9 text-xs">Ctrl</span>K
         </kbd>
       </Button>
       <CommandDialog open={isOpen} onOpenChange={setIsOpen}>
@@ -110,11 +103,11 @@ export default function GlobalSearch() {
                 const item = _item as User;
                 return (
                   <div
-                    className="flex h-14 w-full cursor-pointer items-center gap-2 p-2 hover:bg-slate-4"
+                    className="hover:bg-slate-4 flex h-14 w-full cursor-pointer items-center gap-2 p-2"
                     key={item.id}
                     onClick={() =>
                       handleSelect(() =>
-                        router.push(`/profile/${item.username}`)
+                        router.push(`/profile/${item.username}`),
                       )
                     }
                   >
@@ -132,15 +125,15 @@ export default function GlobalSearch() {
                 const item = _item as PublishedQuest & PublishedPost;
                 return (
                   <div
-                    className="flex h-14 w-full cursor-pointer items-center gap-2 p-2 hover:bg-slate-4"
+                    className="hover:bg-slate-4 flex h-14 w-full cursor-pointer items-center gap-2 p-2"
                     key={item.id}
                     onClick={() =>
                       handleSelect(() =>
                         router.push(
                           item.type === "POST"
                             ? `/${item.destination}/${item.id}`
-                            : `/quests/${item.id}`
-                        )
+                            : `/quests/${item.id}`,
+                        ),
                       )
                     }
                   >
@@ -151,7 +144,7 @@ export default function GlobalSearch() {
                       <p className="overflow-hidden text-ellipsis whitespace-nowrap font-bold dark:text-white">
                         {item.title}
                       </p>
-                      <p>{item.textContent}</p>
+                      <p>{item.text_content}</p>
                     </div>
                   </div>
                 );

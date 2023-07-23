@@ -43,9 +43,13 @@ export const quest = sqliteTable(
     deadline: text("deadline"),
     last_updated: text("last_updated"),
     allow_unpublish: integer("allow_unpublish", { mode: "boolean" }),
-    solvers_count: integer("solvers_count", { mode: "number" }),
+    solvers_count: integer("solvers_count", { mode: "number" })
+      .notNull()
+      .default(0),
     status: text("status", { enum: questStatus }),
     type: text("type", { enum: Works }).notNull(),
+
+    text_content: text("text_content"),
     winner_id: text("winner_id"),
   },
   (works) => ({
@@ -121,14 +125,16 @@ export const SolverSchema = createInsertSchema(solver).extend({
 
 export type Solver = z.infer<typeof SolverSchema>;
 
-export const PublishedQuestSchema = QuestSchema.required({
-  title: true,
-  topic: true,
-  subtopic: true,
-  deadline: true,
-  slots: true,
-  reward: true,
-}).extend({ creator: UserSchema, winner: UserSchema });
+export const PublishedQuestSchema = QuestSchema.extend({
+  title: z.string(),
+  topic: z.enum(Topics),
+  subtopic: z.string(),
+  deadline: z.string(),
+  slots: z.number(),
+  reward: z.number(),
+  creator: UserSchema,
+  winner: z.optional(UserSchema),
+});
 
 export type PublishedQuest = z.infer<typeof PublishedQuestSchema>;
 export type Work = (Post & Quest & Solution) & {

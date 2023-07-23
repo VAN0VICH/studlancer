@@ -7,6 +7,7 @@ import { Replicache } from "replicache";
 
 import { STRANGER, WORKSPACE } from "~/utils/constants";
 import { env } from "~/env.mjs";
+import { wokrspaceMutators } from "~/repl/client/mutators/workspace";
 import { Button } from "~/ui/Button";
 import { WorkspaceStore } from "~/zustand/workspace";
 import List from "./List";
@@ -40,7 +41,7 @@ export default function ListComponent({ children }: { children: ReactNode }) {
       licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
       pushURL: `/api/replicache-push?spaceId=${WORKSPACE}`,
       pullURL: `/api/replicache-pull?spaceId=${WORKSPACE}`,
-      mutators: workspaceMutators,
+      mutators: wokrspaceMutators,
       pullInterval: null,
     });
     setRep(r);

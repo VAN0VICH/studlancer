@@ -36,7 +36,8 @@ export const solution = sqliteTable(
     target_quest_id: text("solution_id"),
     status: text("status", { enum: solutionStatus }),
 
-    type:text("type", { enum:Works}).notNull()
+    text_content: text("text_content"),
+    type: text("type", { enum: Works }).notNull(),
   },
   (solution) => ({
     creatorIdx: uniqueIndex("creatorIdx").on(solution.creator_id),
@@ -90,8 +91,9 @@ export const UpdateSolutionSchema = SolutionSchema.pick({
 }).required({ last_updated: true });
 export type UpdateSolution = z.infer<typeof UpdateSolutionSchema>;
 
-export const PublishedSolutionSchema = SolutionSchema.required({
-  target_quest_id: true,
+export const PublishedSolutionSchema = SolutionSchema.extend({
+  target_quest_id: z.string(),
+  title:z.string()
 });
 
 export type PublishedSolution = z.infer<typeof PublishedSolutionSchema>;

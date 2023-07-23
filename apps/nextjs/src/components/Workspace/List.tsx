@@ -29,9 +29,11 @@ import { Replicache } from "replicache";
 import { useSubscribe } from "replicache-react";
 import { ulid } from "ulid";
 
-import { Post, Quest , Solution, Work} from "@acme/db";
+import { Post, Quest, Solution, Work } from "@acme/db";
+import { WorkType } from "@acme/types";
 
 import { cn } from "~/utils/cn";
+import { WorkspaceMutators } from "~/repl/client/mutators/workspace";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -60,7 +62,6 @@ import {
 } from "~/ui/Dropdown";
 import { ScrollArea } from "~/ui/ScrollArea";
 import { Tabs, TabsList, TabsTrigger } from "~/ui/Tabs";
-import { WorkType } from "@acme/types";
 
 export default function List({
   showList,
@@ -111,13 +112,13 @@ export default function List({
   const handleCreateQuest = useCallback(async () => {
     if (rep) {
       const id = ulid();
-      const createdAt = new Date().toString();
+      const created_at = new Date().toString();
 
       const newQuest: Quest = {
         id,
         created_at,
-        creatorId: userId,
-        inTrash: false,
+        creator_id: userId,
+        in_trash: false,
         published: false,
         type: "QUEST",
         version: 1,
@@ -279,34 +280,31 @@ const Items = ({
     <ScrollArea className="h-fit w-full">
       <ul ref={parent}>
         {type === "QUEST" &&
-          quests &&
-          quests.map((work) => {
+          quests?.map((work) => {
             return (
               <Item
                 handleDeleteWork={handleDeleteWork}
                 router={router}
                 segment={segment}
-                work={work}
+                work={work as Work}
                 key={work.id}
               />
             );
           })}
         {type === "SOLUTION" &&
-          solutions &&
-          solutions.map((work) => {
+          solutions?.map((work) => {
             return (
               <Item
                 handleDeleteWork={handleDeleteWork}
                 router={router}
                 segment={segment}
-                work={work}
+                work={work as Work}
                 key={work.id}
               />
             );
           })}
         {type === "POST" &&
-          posts &&
-          posts.map((work) => {
+          posts?.map((work) => {
             return (
               <Item
                 handleDeleteWork={handleDeleteWork}

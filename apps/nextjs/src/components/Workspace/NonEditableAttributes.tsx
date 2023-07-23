@@ -1,14 +1,12 @@
 import { format } from "date-fns";
 import { Gem, Users2 } from "lucide-react";
-import {
-  PublishedQuest,
-  PublishedSolution,
-  Quest,
-  Solution,
-  Topic,
-} from "~/types/types";
-import { Badge } from "~/ui/Badge";
+
+import { PublishedQuest, PublishedSolution } from "@acme/db";
+
 import { cn } from "~/utils/cn";
+import { Badge } from "~/ui/Badge";
+import { Topic } from "@acme/types";
+
 const Title = ({ title }: { title: string | undefined }) => {
   return (
     <h1 className="2xl font-extrabold" id="title">
@@ -37,7 +35,7 @@ const Subtopic = ({ subtopic }: { subtopic: string[] | undefined }) => {
     <div className="flex gap-2" id="subtopic">
       {subtopic &&
         subtopic.map((s, i) => (
-          <Badge key={i} className="w-fit bg-blue-9 hover:bg-blue-10">
+          <Badge key={i} className="bg-blue-9 hover:bg-blue-10 w-fit">
             {s}
           </Badge>
         ))}
@@ -83,7 +81,7 @@ const DateComponent = ({ questDate }: { questDate: string }) => {
 export const NonEditableQuestAttributes = ({
   quest,
 }: {
-  quest: Quest | PublishedQuest;
+  quest: PublishedQuest;
 }) => {
   const publishedQuest = quest as PublishedQuest;
   return (
@@ -94,7 +92,7 @@ export const NonEditableQuestAttributes = ({
 
           <Badge
             className={cn("flex h-8 w-16 justify-center bg-green-500", {
-              "bg-red-500": publishedQuest.status === "CLOSED",
+              "bg-red-500": quest.status === "closed",
             })}
           >
             {publishedQuest.status}
@@ -106,16 +104,11 @@ export const NonEditableQuestAttributes = ({
       {quest.deadline && <DateComponent questDate={quest.deadline} />}
       <div className="flex gap-2">
         <Topic topic={quest.topic} />
-        <Subtopic subtopic={quest.subtopic} />
+        <Subtopic subtopic={JSON.parse(quest.subtopic) as string[]} />
       </div>
       <div className="flex gap-2">
         <Reward reward={quest.reward} />
-        <Slots
-          slots={quest.slots}
-          solversCount={
-            quest.published ? (quest as PublishedQuest).solversCount : undefined
-          }
-        />
+        <Slots slots={quest.slots} solversCount={quest.solvers_count} />
       </div>
     </div>
   );
@@ -123,22 +116,21 @@ export const NonEditableQuestAttributes = ({
 export const NonEditableSolutionAttributes = ({
   solution,
 }: {
-  solution: Solution | PublishedSolution;
+  solution: PublishedSolution;
 }) => {
-  const publishedSolution = solution as PublishedSolution;
   return (
     <>
       {solution.published ? (
         <div className="flex justify-between">
-          <Title title={publishedSolution.title} />
+          <Title title={solution.title} />
           <Badge
             className={cn("bg-yellow-500", {
-              "bg-green-500": publishedSolution.status === "ACCEPTED",
-              "bg-green-400": publishedSolution.status === "ACKNOWLEDGED",
-              "bg-red-500": publishedSolution.status === "REJECTED",
+              "bg-green-500": solution.status === "accepted",
+              "bg-green-400": solution.status === "acknowledged",
+              "bg-red-500": solution.status === "rejected",
             })}
           >
-            {publishedSolution.status || "POSTED"}
+            {solution.status || "posted"}
           </Badge>
         </div>
       ) : (
