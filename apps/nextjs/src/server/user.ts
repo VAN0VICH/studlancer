@@ -1,27 +1,12 @@
 "server-only";
-import {
-  QueryCommand,
-  QueryCommandInput
-} from "@aws-sdk/lib-dynamodb";
+
 import { cache } from "react";
-import { dynamoClient } from "~/clients/dynamodb";
-import { env } from "~/env.mjs";
-import { User } from "~/types/types";
 
 export const userByUsername = cache(
   async ({ username }: { username: string }) => {
-    const params: QueryCommandInput = {
-      TableName: env.MAIN_TABLE_NAME,
-      IndexName: env.USERNAME_INDEX,
-      KeyConditionExpression: "username = :username AND begins_with(SK, :SK)",
-      ExpressionAttributeValues: { ":username": username, ":SK": "USER#" },
-    };
+  
     try {
-      const result = await dynamoClient.send(new QueryCommand(params));
-
-      if (result.Items && result.Items.length > 0) {
-        return result.Items[0] as User;
-      }
+   
       return null;
     } catch (error) {
       console.log(error);

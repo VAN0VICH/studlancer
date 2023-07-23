@@ -1,16 +1,20 @@
 "use client";
-import { useAuth } from "@clerk/nextjs";
+
 import { useRouter } from "next/navigation";
+import { useAuth } from "@clerk/nextjs";
 import { useSubscribe } from "replicache-react";
+
+import { User } from "@acme/db";
+
 import AboutUser from "~/components/Profile/About";
 import Achievements from "~/components/Profile/Achiements";
 import UserPosts from "~/components/Profile/Posts";
 import UserTopics from "~/components/Profile/Topics";
 import { userKey } from "~/repl/client/mutators/user";
-import { User } from "~/types/types";
 import { Button } from "~/ui/Button";
 import { Card, CardContent, CardHeader } from "~/ui/Card";
 import { ReplicacheInstancesStore } from "~/zustand/rep";
+
 const newDate = new Date().toISOString();
 export default function Profile({
   isMyProfile,
@@ -39,7 +43,7 @@ export default function Profile({
     },
 
     null,
-    [user]
+    [user],
   ) as User | null;
   if (isMyProfile) {
     currentUser = localUser;
@@ -63,10 +67,10 @@ export default function Profile({
             )}
      */}
         <div className="mb-4 flex w-full flex-col items-center gap-4 md:w-[300px] ">
-          <Card className="flex w-full flex-col items-center justify-center rounded-xl py-4 drop-shadow-md dark:border-slate-6 dark:bg-slate-3">
+          <Card className="dark:border-slate-6 dark:bg-slate-3 flex w-full flex-col items-center justify-center rounded-xl py-4 drop-shadow-md">
             <CardHeader className="w-full px-4 py-0">
-              <div className="flex h-[300px] w-full items-center justify-center rounded-md border-[1px] bg-blue-2 shadow-inner dark:border-none dark:shadow-blue-6">
-                <Button className="  bg-blue-4 font-extrabold text-blue-9 hover:bg-blue-6">
+              <div className="bg-blue-2 dark:shadow-blue-6 flex h-[300px] w-full items-center justify-center rounded-md border-[1px] shadow-inner dark:border-none">
+                <Button className="  bg-blue-4 text-blue-9 hover:bg-blue-6 font-extrabold">
                   Create character
                 </Button>
               </div>
@@ -80,18 +84,18 @@ export default function Profile({
               <div className="flex w-full flex-col">
                 {"user1" !== "user1" ? (
                   <>
-                    <Button className=" mx-auto mt-5 w-full max-w-xs bg-blue-6 font-extrabold text-blue-9 hover:bg-blue-7 ">
+                    <Button className=" bg-blue-6 text-blue-9 hover:bg-blue-7 mx-auto mt-5 w-full max-w-xs font-extrabold ">
                       Send message
                     </Button>
 
-                    <Button className=" mx-auto mt-5 w-full max-w-xs bg-green-4 font-extrabold text-green-9 hover:bg-green-6 ">
+                    <Button className=" bg-green-4 text-green-9 hover:bg-green-6 mx-auto mt-5 w-full max-w-xs font-extrabold ">
                       Follow
                     </Button>
                   </>
                 ) : (
                   <Button
                     onClick={() => router.push("/settings/profile")}
-                    className=" mx-auto mt-5 w-full max-w-xs bg-green-100 font-extrabold text-emerald-600 hover:bg-green-6 dark:bg-green-4 "
+                    className=" hover:bg-green-6 dark:bg-green-4 mx-auto mt-5 w-full max-w-xs bg-green-100 font-extrabold text-emerald-600 "
                   >
                     Edit profile
                   </Button>
@@ -99,13 +103,13 @@ export default function Profile({
               </div>
             </CardContent>
           </Card>
-          <Card className="flex w-full flex-col items-center justify-center rounded-xl  py-2 drop-shadow-md  dark:border-slate-6 dark:bg-slate-3">
+          <Card className="dark:border-slate-6 dark:bg-slate-3 flex w-full flex-col items-center  justify-center rounded-xl  py-2 drop-shadow-md">
             <CardHeader className="w-full justify-center px-4 py-0">
               <h2 className="text-center">GUILD</h2>
 
-              <div className="flex h-[200px] w-full items-center justify-center rounded-md border-[1px] bg-blue-2 shadow-inner dark:border-none dark:shadow-blue-6">
+              <div className="bg-blue-2 dark:shadow-blue-6 flex h-[200px] w-full items-center justify-center rounded-md border-[1px] shadow-inner dark:border-none">
                 {"user1" === "user1" && (
-                  <Button className="  bg-blue-4 font-extrabold text-blue-9 hover:bg-blue-6">
+                  <Button className="  bg-blue-4 text-blue-9 hover:bg-blue-6 font-extrabold">
                     Search guild
                   </Button>
                 )}
@@ -121,7 +125,11 @@ export default function Profile({
             about={currentUser.about}
             level={currentUser.level}
             experience={currentUser.experience}
-            links={currentUser.links}
+            links={
+              currentUser.links !== null
+                ? (JSON.parse(currentUser.links) as string[])
+                : null
+            }
           />
           <UserTopics />
           <Achievements />

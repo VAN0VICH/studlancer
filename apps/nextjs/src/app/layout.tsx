@@ -2,13 +2,14 @@ import { type ReactNode } from "react";
 
 import "../styles/globals.css";
 import "../styles/prosemirror.css";
+
 import { ClerkProvider } from "@clerk/nextjs";
-import Toaster from "../ui/Toaster";
-import { cal, inter } from "../styles/fonts";
-import { cn } from "~/utils/cn";
-import NextTopLoader from "nextjs-toploader";
-import { ThemeProvider } from "./ThemeProvider";
 import { Analytics } from "@vercel/analytics/react";
+
+import { cn } from "~/utils/cn";
+import { cal, inter } from "../styles/fonts";
+import Toaster from "../ui/Toaster";
+import { ThemeProvider } from "./ThemeProvider";
 
 // const CabinFont = Cabin({
 //   subsets: ["latin"],
@@ -24,8 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={cn("font-cal", cal.variable, inter.variable)}>
-          <NextTopLoader color="#3b82f6" showSpinner={false} />
+        <body className={cn("font-default", inter.variable)}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
           </ThemeProvider>

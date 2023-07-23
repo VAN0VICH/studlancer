@@ -32,7 +32,7 @@ import { ReplicacheInstancesStore } from "~/zustand/rep";
 import { userKey } from "~/repl/client/mutators/user";
 import { useAuth } from "@clerk/nextjs";
 import { useSubscribe } from "replicache-react";
-import { User } from "~/types/types";
+import { User } from "@acme/db";
 
 const profileFormSchema = z.object({
   username: z.optional(

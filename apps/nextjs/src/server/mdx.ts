@@ -2,7 +2,6 @@
 "server-only";
 import { serialize } from "next-mdx-remote/serialize";
 import { visit } from "unist-util-visit";
-import { redis } from "~/clients/redis";
 import { contentKey } from "~/repl/client/mutators/workspace";
 export async function getPublishedContent(id: string) {
   // const params: GetCommandInput = {
@@ -15,10 +14,7 @@ export async function getPublishedContent(id: string) {
     // if (result.Item) {
     //   return result.Item as PublishedContent;
     // }
-    const content = (await redis.get(contentKey(id))) as string | undefined;
-    if (content) {
-      return content;
-    }
+  
     return null;
   } catch (error) {
     console.log(error);

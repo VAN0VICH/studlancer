@@ -483,6 +483,10 @@ importers:
         version: 5.1.6
 
   packages/config/tailwind:
+    dependencies:
+      '@radix-ui/colors':
+        specifier: ^1.0.0
+        version: 1.0.0
     devDependencies:
       autoprefixer:
         specifier: ^10.4.14

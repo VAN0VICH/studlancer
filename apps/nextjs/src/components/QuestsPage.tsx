@@ -1,12 +1,11 @@
 "use client";
+import { PublishedQuest } from "@acme/db";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { useSubscribe } from "replicache-react";
-import { classNames } from "uploadthing/client";
-import GlobalChat from "~/components/GlobalChat/GlobalChat";
+// import GlobalChat from "~/components/GlobalChat/GlobalChat";
 import QuestComponent from "~/components/QuestComponent";
-import { PublishedQuest, Quest } from "~/types/types";
 import { Button } from "~/ui/Button";
 import {
   Select,
@@ -26,7 +25,7 @@ export default function Quests() {
       const quests = (await tx
         .scan({ prefix: "WORK#QUEST" })
         .entries()
-        .toArray()) as [key: string, value: PublishedQuest][];
+        .toArray()) 
 
       console.log("quests", quests);
       return quests;
@@ -50,7 +49,8 @@ export default function Quests() {
         <div className="flex w-full max-w-3xl flex-col gap-3 lg:w-7/12">
           <div className="flex w-full flex-row-reverse">
             {showChat ? (
-              <GlobalChat setShowChat={setShowChat} />
+              // <GlobalChat setShowChat={setShowChat} />
+              <></>
             ) : (
               <Button
                 className="w-25 fixed bottom-10 right-[50px] z-40 bg-blue-9 text-white hover:bg-blue-10"
@@ -90,8 +90,8 @@ export default function Quests() {
             /> */}
 
           <div className="flex flex-col gap-3" ref={parent}>
-            {quests &&
-              quests.map(([key, value]) => {
+            {
+              quests?.map(([key, value]) => {
                 return (
                   <QuestComponent
                     key={key}

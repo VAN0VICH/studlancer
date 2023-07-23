@@ -128,12 +128,13 @@ export type Solver = z.infer<typeof SolverSchema>;
 export const PublishedQuestSchema = QuestSchema.extend({
   title: z.string(),
   topic: z.enum(Topics),
-  subtopic: z.string(),
+  subtopics: z.string(),
   deadline: z.string(),
   slots: z.number(),
   reward: z.number(),
   creator: UserSchema,
   winner: z.optional(UserSchema),
+  published_at: z.string(),
 });
 
 export type PublishedQuest = z.infer<typeof PublishedQuestSchema>;

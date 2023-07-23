@@ -13,10 +13,10 @@ export default function AboutUser({
   isEditable,
 }: {
   username: string;
-  about: string | undefined;
+  about: string | null;
   level: number;
   experience: number;
-  links: { value: string }[] | undefined;
+  links: string[] | null;
   isEditable: boolean;
 }) {
   return (
@@ -68,7 +68,7 @@ export default function AboutUser({
       <CardFooter className="absolute bottom-0 flex h-fit flex-col items-start px-5 pb-2">
         <div className="flex gap-2">
           <TwitterIcon className="text-blue-9" size={20} />
-          <p className="text-blue-9 ">{links && links[0]?.value}</p>
+          <p className="text-blue-9 ">{links!==null ? links[0]:""}</p>
         </div>
         <div>
           <svg

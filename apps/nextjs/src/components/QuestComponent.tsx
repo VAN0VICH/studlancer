@@ -1,11 +1,14 @@
+import Link from "next/link";
 import { format, formatDistanceToNowStrict } from "date-fns";
 import { Gem, Users2 } from "lucide-react";
-import Link from "next/link";
-import { PublishedQuest } from "~/types/types";
+
+import { PublishedQuest } from "@acme/db";
+
+import { TopicColor } from "~/utils/topicsColor";
 import { Avatar, AvatarFallback, AvatarImage } from "~/ui/Avatar";
 import { Badge } from "~/ui/Badge";
 import { Card, CardContent, CardFooter, CardHeader } from "~/ui/Card";
-import { TopicColor } from "~/utils/topicsColor";
+
 export default function QuestComponent({
   quest,
   includeContent,
@@ -16,11 +19,11 @@ export default function QuestComponent({
   includeDetails: boolean;
 }) {
   return (
-    <Card className="h-fit w-full rounded-xl border-[1px] border-slate-200 bg-white  drop-shadow-sm dark:border-slate-6 dark:bg-slate-3">
+    <Card className="dark:border-slate-6 dark:bg-slate-3 h-fit w-full rounded-xl border-[1px]  border-slate-200 bg-white drop-shadow-sm">
       <CardHeader className="flex w-full p-2">
         <div className="flex w-full justify-between gap-5">
           <div className="flex w-full items-center gap-4">
-            {quest.publisherUsername && (
+            {quest.creator.username && (
               // <Link href={`/profile/${quest.username}`}>
               <Avatar>
                 <AvatarImage src="https://github.com/shadcn.png" />
@@ -33,10 +36,11 @@ export default function QuestComponent({
               <div className="flex w-full items-center justify-between gap-1">
                 <div className=" flex flex-wrap items-center gap-1">
                   <p className="text-sm font-extrabold md:text-lg">
-                    {quest.publisherUsername}
+                    {quest.creator.username}
                   </p>
                   <p className=" text-xs font-bold opacity-70  md:text-sm">
-                    {formatDistanceToNowStrict(new Date(quest.publishedAt))} ago
+                    {formatDistanceToNowStrict(new Date(quest.published_at))}{" "}
+                    ago
                   </p>
                 </div>
 
@@ -44,7 +48,7 @@ export default function QuestComponent({
                   <div className="flex h-8  items-center gap-1">
                     <div className="hidden gap-2 sm:flex">
                       <p>due</p>
-                      <Badge className="wax-w-28 flex h-6 min-w-[90px]  bg-blue-9">
+                      <Badge className="wax-w-28 bg-blue-9 flex h-6  min-w-[90px]">
                         <p>{format(new Date(quest.deadline), "PP")} </p>
                       </Badge>
                     </div>
@@ -60,11 +64,13 @@ export default function QuestComponent({
                   {quest.topic}
                 </Badge>
 
-                {quest.subtopic.map((subtopic, i) => (
-                  <Badge className="hidden bg-blue-400 sm:block" key={i}>
-                    {subtopic}
-                  </Badge>
-                ))}
+                {(JSON.parse(quest.subtopics) as string[]).map(
+                  (subtopic, i) => (
+                    <Badge className="hidden bg-blue-400 sm:block" key={i}>
+                      {subtopic}
+                    </Badge>
+                  ),
+                )}
               </div>
             </div>
           </div>
@@ -77,13 +83,13 @@ export default function QuestComponent({
             {quest.title}
           </h3>
           {includeContent && (
-            <p className="font-default ">{quest.textContent}</p>
+            <p className="font-default ">{quest.text_content}</p>
           )}
         </CardContent>
       </Link>
 
       {includeDetails && (
-        <CardFooter className="flex gap-2 border-t-2 px-3 pb-2 pt-2  dark:border-slate-6">
+        <CardFooter className="dark:border-slate-6 flex gap-2 border-t-2 px-3 pb-2  pt-2">
           <span className="flex gap-2">
             <Gem className="text-purple-9" size={20} />
 
@@ -92,7 +98,7 @@ export default function QuestComponent({
 
           <span className="flex gap-2">
             <Users2 className="text-slate-500 dark:text-slate-100" size={22} />
-            <p className="text-slate-500 dark:text-slate-100">{`${quest.solversCount}/${quest.slots}`}</p>
+            <p className="text-slate-500 dark:text-slate-100">{`${quest.solvers_count}/${quest.slots}`}</p>
           </span>
         </CardFooter>
       )}

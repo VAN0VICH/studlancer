@@ -1,7 +1,9 @@
 import { ChangeEvent, useCallback, useEffect } from "react";
-import { Quest, Topic, WorkType } from "../../types/types";
-
 import debounce from "lodash.debounce";
+
+import { Quest } from "@acme/db";
+import { Topic, WorkType } from "@acme/types";
+
 import { WorkspaceStore } from "../../zustand/workspace";
 import {
   DatePicker,
@@ -16,7 +18,7 @@ import {
 const QuestAttributes = ({ quest }: { quest: Quest }) => {
   const attributeErrors = WorkspaceStore((state) => state.attributeErrors);
   const setAttributeErrors = WorkspaceStore(
-    (state) => state.setAttributeErrors
+    (state) => state.setAttributeErrors,
   );
   const resetAttributeErrors = WorkspaceStore((state) => state.resetErrors);
   const rep = WorkspaceStore((state) => state.rep);
@@ -37,7 +39,7 @@ const QuestAttributes = ({ quest }: { quest: Quest }) => {
         });
       }
     }, 1000),
-    []
+    [],
   );
   const handleTopicChange = async (topic: Topic) => {
     setAttributeErrors({ topic: { error: false } });
@@ -106,19 +108,23 @@ const QuestAttributes = ({ quest }: { quest: Quest }) => {
       <Title
         placeholder="Untitled"
         handleTitleChange={handleTitleChange}
-        title={quest.title}
+        title={quest.title === null ? undefined : quest.title}
         error={attributeErrors.title}
       />
 
       <TopicSelect
         handleTopicChange={handleTopicChange}
-        topic={quest.topic}
+        topic={quest.topic === null ? undefined : quest.topic}
         error={attributeErrors.topic}
       />
 
       <Subtopic
         handleSubtopicChange={handleSubtopicChange}
-        subtopic={quest.subtopic}
+        subtopic={
+          quest.subtopics === null || quest.subtopics === undefined
+            ? undefined
+            : (JSON.parse(quest.subtopics) as string[])
+        }
         error={attributeErrors.subtopic}
       />
       <div className="flex flex-wrap items-center gap-1">
@@ -136,7 +142,7 @@ const QuestAttributes = ({ quest }: { quest: Quest }) => {
 
       <DatePicker
         handleDateChange={handleDateChange}
-        date={quest.deadline}
+        date={quest.deadline === null ? undefined : quest.deadline}
         error={attributeErrors.deadline}
       />
     </div>

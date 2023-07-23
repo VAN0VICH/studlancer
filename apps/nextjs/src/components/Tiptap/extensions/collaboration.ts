@@ -1,8 +1,5 @@
-import TiptapCollaboration from "@tiptap/extension-collaboration";
-import TiptapCursor from "@tiptap/extension-collaboration-cursor";
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
 import YProvider from "y-partykit/provider";
-import * as Y from "yjs";
 
 // const partykitHost = "localhost:1999"
 // const partykitHost = "yjs.threepointone.partykit.dev/party";

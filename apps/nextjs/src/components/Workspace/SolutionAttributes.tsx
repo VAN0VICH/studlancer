@@ -1,6 +1,7 @@
 import { useRef } from "react";
 
-import { Solution } from "~/types/types";
+import { Solution } from "@acme/db";
+
 import { WorkspaceStore } from "../../zustand/workspace";
 
 const SolutionAttributes = ({ solution }: { solution: Solution }) => {

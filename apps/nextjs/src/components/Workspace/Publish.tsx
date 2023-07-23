@@ -4,7 +4,6 @@
 import { UndoManager } from "@rocicorp/undo";
 import { useCallback, useRef, useState } from "react";
 import { z } from "zod";
-import { MergedWork, Quest } from "~/types/types";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,13 +20,14 @@ import { UpdateAttributeErrorsZod, WorkspaceStore } from "~/zustand/workspace";
 import { Editor } from "@tiptap/react";
 import { toast } from "sonner";
 import * as Y from "yjs";
+import { Work } from "@acme/db";
 const Publish = ({
   work,
   editor,
   ydoc,
   isAuthorised,
 }: {
-  work: MergedWork;
+  work: Work;
   editor: Editor;
   ydoc: Y.Doc;
   isAuthorised: boolean;
@@ -164,7 +164,7 @@ const Publish = ({
                 <p className="flex">
                   <p>You will pay</p>
                   <p className="px-1 font-semibold text-violet-500">{`${
-                    (work as Quest)?.reward || 0
+                    work?.reward || 0
                   } diamonds`}</p>
                   <p> for publishing the quest.</p>
                 </p>

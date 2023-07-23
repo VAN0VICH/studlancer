@@ -4,45 +4,30 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  ReactNode,
-  useRef,
-  useLayoutEffect,
-} from "react";
-import { Editor, Range, Extension } from "@tiptap/core";
-import Suggestion from "@tiptap/suggestion";
+import { Editor, Extension, Range } from "@tiptap/core";
 import { ReactRenderer } from "@tiptap/react";
-// import { useCompletion } from "ai/react";
-import tippy from "tippy.js";
+import Suggestion from "@tiptap/suggestion";
 import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+// import { useCompletion } from "ai/react";
+import {
+  Code,
   Heading1,
   Heading2,
   Heading3,
+  Image as ImageIcon,
   List,
   ListOrdered,
-  MessageSquarePlus,
   Text,
-  TextQuote,
-  Image as ImageIcon,
-  Code,
-  CheckSquare,
+  TextQuote
 } from "lucide-react";
-import { useUploadThing } from "~/utils/useUploadThing";
-import {
-  generatePermittedFileTypes,
-  handleImageUpload,
-} from "../utils/imageUpload";
-import { generateMimeTypes } from "uploadthing/client";
-import { toast } from "sonner";
-// import LoadingCircle from "@/ui/shared/loading-circle";
-// import { toast } from "sonner";
-// import va from "@vercel/analytics";
-// import Magic from "@/ui/shared/magic";
-// import { handleImageUpload } from "@/lib/utils/editor";
-
+import tippy from "tippy.js";
 interface CommandItemProps {
   title: string;
   description: string;

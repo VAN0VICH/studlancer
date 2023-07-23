@@ -1,14 +1,17 @@
 "use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useAuth } from "@clerk/nextjs";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { BookOpenCheck, Gem } from "lucide-react";
-import Link from "next/link";
-import Pusher from "pusher-js";
-import { useEffect, useState } from "react";
 import { Replicache } from "replicache";
 import { useSubscribe } from "replicache-react";
+
+import { User } from "@acme/db";
+
+import { LEADERBOARD } from "~/utils/constants";
 import { env } from "~/env.mjs";
-import { LeaderboardType, UserComponent } from "~/types/types";
 import { Avatar, AvatarFallback, AvatarImage } from "~/ui/Avatar";
 import { Badge } from "~/ui/Badge";
 import { Button } from "~/ui/Button";
@@ -19,7 +22,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/ui/Tooltip";
-import { LEADERBOARD } from "~/utils/constants";
+
+interface LeaderboardType {
+  username: string;
+  level: number;
+  filter: "quests" | "reward";
+  position: number;
+  profile: string | null;
+  quests_solved: number;
+  rewarded: number;
+}
 
 const UserComponent = ({
   username,
@@ -27,16 +39,16 @@ const UserComponent = ({
   filter,
   position,
   profile,
-  questsSolved,
+  quests_solved,
   rewarded,
 }: LeaderboardType) => {
   return (
-    <Card className="h-16 w-full flex-row items-center gap-2 rounded-sm p-2 shadow-md dark:border-slate-6 dark:bg-slate-3">
+    <Card className="dark:border-slate-6 dark:bg-slate-3 h-16 w-full flex-row items-center gap-2 rounded-sm p-2 shadow-md">
       <Link
         href={`/profile/${username}`}
         className="relative flex items-center gap-2"
       >
-        <div className="flex h-12 w-4 items-center justify-center text-slate-11">
+        <div className="text-slate-11 flex h-12 w-4 items-center justify-center">
           <p className="font-bold">{position}</p>
         </div>
 
@@ -45,18 +57,18 @@ const UserComponent = ({
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div className="overflow-hidden text-ellipsis whitespace-nowrap">
-          <Badge className="h-4 bg-blue-9">{`${level} lvl`}</Badge>
+          <Badge className="bg-blue-9 h-4">{`${level} lvl`}</Badge>
           <p className="overflow-hidden text-ellipsis whitespace-nowrap font-bold">
             {username}
           </p>
         </div>
         <div className="absolute right-1 mr-1 flex items-center gap-2 sm:right-5">
           <BookOpenCheck className="text-blue-9" />
-          <p className="font-bold text-blue-9">{questsSolved || 0}</p>
+          <p className="text-blue-9 font-bold">{quests_solved || 0}</p>
         </div>
         <div className="absolute right-14 mr-1 flex items-center gap-2 sm:right-20">
           <Gem className="text-purple-9" />
-          <p className="font-bold text-purple-9">{rewarded}</p>
+          <p className="text-purple-9 font-bold">{rewarded}</p>
         </div>
       </Link>
     </Card>
@@ -66,39 +78,26 @@ export default function Leaderboard() {
   const [filter, setFilter] = useState<"reward" | "quests">("quests");
   const [rep, setRep] = useState<Replicache>();
   const [parent, enableAnimations] = useAutoAnimate(/* optional config */);
-  useEffect(() => {
-    if (rep) {
-      return;
-    }
-    const r = new Replicache({
-      name: LEADERBOARD,
-      licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
-      pushURL: `/api/replicache-push?spaceId=${LEADERBOARD}`,
-      pullURL: `/api/replicache-pull?spaceId=${LEADERBOARD}`,
-      pullInterval: null,
-    });
-    setRep(r);
-    if (env.NEXT_PUBLIC_PUSHER_KEY && env.NEXT_PUBLIC_PUSHER_CLUSTER) {
-      Pusher.logToConsole = true;
-      const pusher = new Pusher(env.NEXT_PUBLIC_PUSHER_KEY, {
-        cluster: env.NEXT_PUBLIC_PUSHER_CLUSTER,
-      });
+  // useEffect(() => {
+  //   if (rep) {
+  //     return;
+  //   }
+  //   const r = new Replicache({
+  //     name: LEADERBOARD,
+  //     licenseKey: env.NEXT_PUBLIC_REPLICACHE_KEY,
+  //     pushURL: `/api/replicache-push?spaceId=${LEADERBOARD}`,
+  //     pullURL: `/api/replicache-pull?spaceId=${LEADERBOARD}`,
+  //     pullInterval: null,
+  //   });
+  //   setRep(r);
 
-      const channel = pusher.subscribe(LEADERBOARD);
-      channel.bind("poke", () => {
-        r.pull();
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rep]);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [rep]);
   const leaders = useSubscribe(
     rep,
     async (tx) => {
       const list = (await tx.scan({ prefix: "USER#" }).entries().toArray()) as
-        | [
-            key: string,
-            user: UserComponent & { rewarded: number; questsSolved: number }
-          ][]
+        | [key: string, user: User][]
         | null;
       if (list) {
         console.log("leaders", list);
@@ -107,17 +106,17 @@ export default function Leaderboard() {
       return null;
     },
     null,
-    []
+    [],
   );
   const leadersByReward = leaders
     ? leaders.sort(
-        ([key, user], [key2, user2]) => user2.rewarded - user.rewarded
+        ([key, user], [key2, user2]) => user2.rewarded - user.rewarded,
       )
     : [];
   const leadersByQuests = leaders
     ? leaders.sort(
         ([key, user], [key2, user2]) =>
-          user2.questsSolved || 0 - user.questsSolved || 0
+          user2.quests_solved || 0 - user.quests_solved || 0,
       )
     : [];
 
@@ -171,11 +170,11 @@ export default function Leaderboard() {
                   level={u.level}
                   position={i + 1}
                   profile={u.profile}
-                  questsSolved={u.questsSolved}
+                  quests_solved={u.quests_solved}
                   rewarded={u.rewarded}
                 />
               ))
-            : leadersByQuests.map(([key, u], i) => (
+            : leadersByReward.map(([key, u], i) => (
                 <UserComponent
                   key={u.id}
                   filter={filter}
@@ -183,7 +182,7 @@ export default function Leaderboard() {
                   level={u.level}
                   position={i + 1}
                   profile={u.profile}
-                  questsSolved={u.questsSolved}
+                  quests_solved={u.quests_solved}
                   rewarded={u.rewarded}
                 />
               ))}

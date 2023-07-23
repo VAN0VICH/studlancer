@@ -104,7 +104,7 @@ export const NonEditableQuestAttributes = ({
       {quest.deadline && <DateComponent questDate={quest.deadline} />}
       <div className="flex gap-2">
         <Topic topic={quest.topic} />
-        <Subtopic subtopic={JSON.parse(quest.subtopic) as string[]} />
+        <Subtopic subtopic={JSON.parse(quest.subtopics) as string[]} />
       </div>
       <div className="flex gap-2">
         <Reward reward={quest.reward} />
