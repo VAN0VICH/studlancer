@@ -1,3 +1,347 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --white: white;
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --border: hsl(208, 11.3%, 88.9%);
+    --input: 214.3 31.8% 91.4%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 215 20.2% 65.1%;
+
+    --radius: 0.5rem;
+    --blue: #3b82f6;
+    --orange: #f97316;
+    --button: linear-gradient(
+        180deg,
+        rgba(255, 118, 60, 0) -2.17%,
+        rgba(255, 118, 60, 0.8) 7.69%,
+        #f97316 100%
+      ),
+      #ffffff;
+    --purple: #a855f7;
+    --box-shadow: 0px 0px 4px 0.5px rgba(72, 72, 72, 0.25);
+    
+  }
+
+  .dark {
+    /* --white: #020617; */
+
+    --white: hsla(182, 86.7%, 91.4%, 0.057);
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
+
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+
+    --border: hsla(209, 95.3%, 93.5%, 0.139);
+    --input: 216 34% 17%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 1.2%;
+
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 216 34% 17%;
+
+    --radius: 0.5rem;
+    --box-shadow: none;
+  }
+}
+
+@layer base {
+  /* * {
+    @apply border-border;
+  } */
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+.childrenContainer {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+
+  transition: all 0.2s ease-in-out;
+}
+.sidebar {
+  padding: 10px;
+  z-index: 100;
+  left: -500px;
+  position: fixed;
+  overflow-y: auto;
+  width: 80%;
+  height: 100vh;
+  background: var(--white);
+
+  /* box-shadow: var(--box-shadow); */
+  border-right: 1px solid var(--border);
+  transition: all 0.1s ease-in-out;
+  backdrop-filter: blur(4px);
+}
+.listContainer {
+  background: var(--white);
+  margin-top: 28px;
+  height: calc(100vh - 56px);
+  left: -560px;
+  width: 256px;
+  height: calc(100vh - 56px);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  z-index: 42; /* Stay on top */
+  transition: all 0.1s ease-in-out;
+  border-top: none;
+  /* box-shadow: var(--box-shadow); */
+  border-right: 1px solid var(--border);
+}
+.show {
+  left: 0;
+}
+
+.showList {
+  left: 0;
+}
+.workspaceContainer {
+  margin-top: 56px;
+  overflow-y: scroll;
+  height: calc(100vh - 56px);
+  width: 100%;
+  transition: all 0.1s ease-in-out;
+}
+@media screen and (min-width: 500px) {
+  .sidebar {
+    width: 256px;
+  }
+}
+@media screen and (min-width: 1024px) {
+  .adjustChildren {
+    width: calc(100% - 256px);
+    margin-left: 256px;
+  }
+  .adjust {
+    width: calc(100% - 256px);
+    margin-left: 256px;
+  }
+}
+
+.image-resizer {
+  display: block;
+  width: 7px;
+  height: 7px;
+  position: absolute;
+  background-color: rgb(60, 132, 244);
+  border: 1px solid #fff;
+}
+
+.image-resizer.image-resizer-n {
+  top: -6px;
+  left: 48%;
+  cursor: n-resize;
+}
+
+.image-resizer.image-resizer-ne {
+  top: -6px;
+  right: -6px;
+  cursor: ne-resize;
+}
+
+.image-resizer.image-resizer-e {
+  bottom: 48%;
+  right: -6px;
+  cursor: e-resize;
+}
+
+.image-resizer.image-resizer-se {
+  bottom: -2px;
+  right: -6px;
+  cursor: nwse-resize;
+}
+
+.image-resizer.image-resizer-s {
+  bottom: -2px;
+  left: 48%;
+  cursor: s-resize;
+}
+
+.image-resizer.image-resizer-sw {
+  bottom: -2px;
+  left: -6px;
+  cursor: sw-resize;
+}
+
+.image-resizer.image-resizer-w {
+  bottom: 48%;
+  left: -6px;
+  cursor: w-resize;
+}
+
+.image-resizer.image-resizer-nw {
+  top: -6px;
+  left: -6px;
+  cursor: nw-resize;
+}
+.image-control-wrapper--resizing {
+  touch-action: none;
+}
+.ProseMirror {
+  position: relative;
+  outline: none;
+  height: 100%;
+  margin-top: 10px;
+}
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror .is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #adb5bd;
+  pointer-events: none;
+  height: 0;
+}
+
+/* Custom image styles */
+
+.ProseMirror img {
+  transition: filter 0.1s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    filter: brightness(90%);
+  }
+
+  &.ProseMirror-selectednode {
+    outline: 3px solid #5abbf7;
+    filter: brightness(90%);
+  }
+}
+
+/* Custom TODO list checkboxes – shoutout to this awesome tutorial: https://moderncss.dev/pure-css-custom-checkbox-style/ */
+
+ul[data-type="taskList"] li > label {
+  margin-right: 0.2rem;
+  user-select: none;
+}
+
+@media screen and (max-width: 768px) {
+  ul[data-type="taskList"] li > label {
+    margin-right: 0.5rem;
+  }
+}
+p {
+  margin: 0;
+}
+
+ul[data-type="taskList"] li > label input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+  cursor: pointer;
+  width: 1.2em;
+  height: 1.2em;
+  position: relative;
+  top: 5px;
+  border: 2px solid black;
+  margin-right: 0.3rem;
+  display: grid;
+  place-content: center;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+
+  &:active {
+    background-color: #e9ecef;
+  }
+
+  &::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em;
+    transform-origin: center;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  }
+
+  &:checked::before {
+    transform: scale(1);
+  }
+}
+
+ul[data-type="taskList"] li[data-checked="true"] > div > p {
+  color: #a8a29e;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}
+
+h1 {
+  font-weight: 900;
+  font-size: xx-large;
+}
+h2 {
+  font-weight: 800;
+  font-size: x-large;
+}
+h3 {
+  font-weight: 800;
+  font-size: large;
+}
+
+.list-decimal{
+  padding:15px
+}

@@ -5,7 +5,7 @@ import {
   text,
   uniqueIndex,
 } from "drizzle-orm/sqlite-core";
-import { createInsertSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
 
 import { ADMIN, USER } from "../constants";
@@ -40,6 +40,7 @@ export const user = sqliteTable(
 
 export type User = InferModel<typeof user>;
 export const InsertUserSchema = createInsertSchema(user);
+export const UserSchema = createSelectSchema(user);
 export type InsertUser = z.infer<typeof InsertUserSchema>;
 export const UpdateUserSchema = InsertUserSchema.pick({
   about: true,

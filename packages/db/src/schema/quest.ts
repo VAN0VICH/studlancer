@@ -10,12 +10,12 @@ import {
 import { createInsertSchema } from "drizzle-zod";
 import z from "zod";
 
-import { questStatus } from "@acme/types";
+import { questStatus, WorkType } from "@acme/types";
 
 import { Topics } from "../constants";
-import { solution } from "./solution";
-import { user } from "./user";
-
+import { Post } from "./post";
+import { Solution, solution, SolutionSchema } from "./solution";
+import { user, UserSchema } from "./user";
 
 export const quest = sqliteTable(
   "quest",
@@ -97,6 +97,15 @@ export const UpdateQuestSchema = QuestSchema.pick({
 }).required({ last_updated: true });
 export type UpdateWork = z.infer<typeof UpdateQuestSchema>;
 
+export const InsertSolverSchema = createInsertSchema(solver);
+export const SolverSchema = createInsertSchema(solver).extend({
+  user: UserSchema,
+  quest: QuestSchema,
+  solution: SolutionSchema,
+});
+
+export type Solver = z.infer<typeof SolverSchema>;
+
 export const PublishedQuestSchema = QuestSchema.required({
   title: true,
   topic: true,
@@ -107,3 +116,6 @@ export const PublishedQuestSchema = QuestSchema.required({
 });
 
 export type PublishedQuest = z.infer<typeof PublishedQuestSchema>;
+export type Work = (Post & Quest & Solution) & {
+  type: WorkType;
+};

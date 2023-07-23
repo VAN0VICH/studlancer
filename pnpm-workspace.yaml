@@ -3,8 +3,6 @@ packages:
   - apps/nextjs
   - apps/server
 
-
-  - packages/ui
   - packages/clients
   - packages/types
   - packages/api
