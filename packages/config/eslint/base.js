@@ -7,6 +7,7 @@ const config = {
     "plugin:@typescript-eslint/stylistic-type-checked",
     "prettier",
   ],
+
   env: {
     es2022: true,
     node: true,
@@ -30,6 +31,8 @@ const config = {
       { checksVoidReturn: { attributes: false } },
     ],
     "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
+
+    "@typescript-eslint/no-explicit-any": "off",
   },
   ignorePatterns: [
     "**/.eslintrc.cjs",

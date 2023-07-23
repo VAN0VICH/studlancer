@@ -1,27 +1,19 @@
 {
-  "name": "@acme/db",
+  "name": "@acme/clients",
   "version": "0.1.0",
   "main": "src/index.ts",
   "types": "src/index.ts",
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf .turbo node_modules",
-    "db:generate": "pnpm with-env drizzle-kit generate:sqlite",
-    "db:push": "pnpm with-env drizzle-kit push:sqlite",
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@acme/types": "^0.1.0",
-    "@libsql/client": "^0.3.1",
     "@t3-oss/env-core": "^0.6.0",
-    "drizzle-orm": "^0.27.2",
-    "drizzle-zod": "^0.4.4",
-    "replicache": "13.0.0-beta.1",
     "zod": "^3.21.4"
   },
   "devDependencies": {
     "dotenv-cli": "^7.2.1",
-    "drizzle-kit": "^0.19.10",
     "typescript": "^5.1.6"
   },
   "eslintConfig": {

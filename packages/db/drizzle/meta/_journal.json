@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1690076293152,
+      "tag": "0000_organic_northstar",
+      "breakpoints": true
+    }
+  ]
+}

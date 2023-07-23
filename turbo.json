@@ -2,6 +2,14 @@
   "$schema": "https://turborepo.org/schema.json",
   "globalDependencies": ["**/.env", "tsconfig.json"],
   "pipeline": {
+    "db:generate": {
+      "inputs": ["schema/*"],
+      "cache": false
+    },
+    "db:push": {
+      "inputs": ["schema/*"],
+      "cache": false
+    },
     "dev": {
       "persistent": true,
       "cache": false
@@ -28,6 +36,7 @@
   "globalEnv": [
     "CI",
     "DATABASE_URL",
+    "DATABASE_AUTH_TOKEN",
     "DISCORD_CLIENT_ID",
     "DISCORD_CLIENT_SECRET",
     "EXPO_ROUTER_APP_ROOT",
