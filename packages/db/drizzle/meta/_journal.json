@@ -8,6 +8,20 @@
       "when": 1690076293152,
       "tag": "0000_organic_northstar",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1690110196609,
+      "tag": "0001_normal_talkback",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1690953951995,
+      "tag": "0002_faithful_patch",
+      "breakpoints": true
     }
   ]
 }

@@ -127,14 +127,14 @@ export const solutionStatus = [
 export const open = "open" as const;
 export const closed = "closed" as const;
 export const questStatus = ["open", "closed"] as const;
-export const SubtopicSuggestion = [
+export const Subtopics = [
   "LOGO",
   "AI",
   "MACHINE LEARNING",
   "WEB",
   "MOBILE-DEV",
   "ESSAY",
-];
+] as const;
 export const Topics = [
   "MARKETING",
   "BUSINESS",
@@ -145,6 +145,7 @@ export const Topics = [
   "VIDEOGRAPHY",
   "GAMING",
 ] as const;
+export const GuildRankings = ["NEWBIE", "MID", "LORD", "FOUNDER"] as const;
 export const Channel = ["GENERAL", ...Topics] as const;
 export const ChannelZod = z.enum(Channel);
 export type ChannelType = z.infer<typeof ChannelZod>;

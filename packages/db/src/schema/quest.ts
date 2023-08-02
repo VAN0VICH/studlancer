@@ -47,7 +47,9 @@ export const quest = sqliteTable(
       .notNull()
       .default(0),
     status: text("status", { enum: questStatus }),
-    type: text("type", { enum: Works }).notNull(),
+    type: text("type", {
+      enum: ["QUEST", "SOLUTION", "POST"] as const,
+    }).notNull(),
 
     text_content: text("text_content"),
     winner_id: text("winner_id"),
@@ -137,7 +139,9 @@ export const PublishedQuestSchema = QuestSchema.extend({
   published_at: z.string(),
 });
 
+
 export type PublishedQuest = z.infer<typeof PublishedQuestSchema>;
 export type Work = (Post & Quest & Solution) & {
   type: WorkType;
 };
+

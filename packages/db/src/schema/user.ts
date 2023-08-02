@@ -1,4 +1,4 @@
-import type { InferModel } from "drizzle-orm";
+import { relations, type InferModel } from "drizzle-orm";
 import {
   integer,
   sqliteTable,
@@ -9,6 +9,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
 
 import { ADMIN, USER } from "../constants";
+import { guild } from "./guild";
 
 export const user = sqliteTable(
   "user",
@@ -37,6 +38,13 @@ export const user = sqliteTable(
     usernameIdx: uniqueIndex("usernameIdx").on(users.username),
   }),
 );
+export const userRelations = relations(user, ({ one, many }) => ({
+  guild: one(guild, {
+    fields: [user.guild_id],
+    references: [guild.id],
+  }),
+}));
+
 
 export type User = InferModel<typeof user>;
 export const InsertUserSchema = createInsertSchema(user);

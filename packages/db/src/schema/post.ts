@@ -32,14 +32,16 @@ export const post = sqliteTable(
     destination: text("destination", { enum: PostDestination }),
     like: integer("like", { mode: "number" }).default(0),
 
-    text_content: text("text_content"),
+    type: text("type", {
+      enum: ["QUEST", "SOLUTION", "POST"] as const,
+    }).notNull(),
 
-    type: text("type", { enum: Works }).notNull(),
+    text_content: text("text_content"),
   },
   (works) => ({
-    creatorIdx: uniqueIndex("creatorIdx").on(works.creator_id),
-    versionIdx: uniqueIndex("versionIdx").on(works.version),
-    publishedIdx: uniqueIndex("publishedIdx").on(works.published),
+    creatorIdx1: uniqueIndex("creatorIdx1").on(works.creator_id),
+    versionIdx1: uniqueIndex("versionIdx1").on(works.version),
+    publishedIdx1: uniqueIndex("publishedIdx1").on(works.published),
   }),
 );
 export const postRelations = relations(post, ({ one, many }) => ({
@@ -51,7 +53,5 @@ export const postRelations = relations(post, ({ one, many }) => ({
 }));
 export type Post = InferModel<typeof post>;
 export const PostSchema = createInsertSchema(post);
-export const PublishedPostSchema = PostSchema.extend({
-  destination: z.enum(PostDestination),
-});
+export const PublishedPostSchema = PostSchema.extend({destination:z.enum(PostDestination)})
 export type PublishedPost = z.infer<typeof PublishedPostSchema>;

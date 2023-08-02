@@ -223,7 +223,13 @@ export const updateItemsDB = ({
   if (tableName === "user") {
     const result = db.transaction(async (tx) => {
       for (const { key, value } of items) {
-        await tx.update(user).set(value).where(eq(user.id, key));
+        await tx
+          .update(user)
+          .set({
+            ...value,
+            version: sql`${user.version} = ${user.version} + 1`,
+          })
+          .where(eq(user.id, key));
       }
     });
     return result;
@@ -231,7 +237,13 @@ export const updateItemsDB = ({
   if (tableName === "quest") {
     const result = db.transaction(async (tx) => {
       for (const { key, value } of items.values()) {
-        await tx.update(quest).set(value).where(eq(quest.id, key));
+        await tx
+          .update(quest)
+          .set({
+            ...value,
+            version: sql`${quest.version} = ${quest.version} + 1`,
+          })
+          .where(eq(quest.id, key));
       }
     });
     return result;
@@ -239,7 +251,14 @@ export const updateItemsDB = ({
   if (tableName === "solution") {
     const result = db.transaction(async (tx) => {
       for (const { key, value } of items.values()) {
-        await tx.update(solution).set(value).where(eq(solution.id, key));
+        await tx
+          .update(solution)
+          .set({
+            ...value,
+
+            version: sql`${solution.version} = ${solution.version} + 1`,
+          })
+          .where(eq(solution.id, key));
       }
     });
     return result;
@@ -247,7 +266,13 @@ export const updateItemsDB = ({
   if (tableName === "post") {
     const result = db.transaction(async (tx) => {
       for (const { key, value } of items.values()) {
-        await tx.update(post).set(value).where(eq(post.id, key));
+        await tx
+          .update(post)
+          .set({
+            ...value,
+            version: sql`${post.version} = ${post.version} + 1`,
+          })
+          .where(eq(post.id, key));
       }
     });
     return result;
@@ -293,6 +318,7 @@ export const deleteItemsDB = ({
     return result;
   }
 };
+//last mutation ids of specific client IDs
 export const lastMutationIds = async ({
   clientIDs,
   clientGroupID,
@@ -340,6 +366,7 @@ export const setLastMutationIdsDB = async ({
     }
   });
 };
+//last mutation ids of the clients in the client group
 export const allLastMutationIDs = async ({
   clientGroupID,
 }: {

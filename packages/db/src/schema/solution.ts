@@ -26,7 +26,9 @@ export const solution = sqliteTable(
     title: text("title"),
     version: integer("version").notNull().default(1),
     created_at: text("created_at").notNull(),
-    creator_id: text("creator_id").notNull(),
+    creator_id: text("creator_id")
+      .notNull()
+      .references(() => user.id),
     published: integer("published", { mode: "boolean" })
       .notNull()
       .default(false),
@@ -36,13 +38,15 @@ export const solution = sqliteTable(
     target_quest_id: text("solution_id"),
     status: text("status", { enum: solutionStatus }),
 
+    type: text("type", {
+      enum: ["QUEST", "SOLUTION", "POST"] as const,
+    }).notNull(),
     text_content: text("text_content"),
-    type: text("type", { enum: Works }).notNull(),
   },
   (solution) => ({
-    creatorIdx: uniqueIndex("creatorIdx").on(solution.creator_id),
-    versionIdx: uniqueIndex("versionIdx").on(solution.version),
-    publishedIdx: uniqueIndex("publishedIdx").on(solution.published),
+    creatorIdx2: uniqueIndex("creatorIdx2").on(solution.creator_id),
+    versionIdx2: uniqueIndex("versionIdx2").on(solution.version),
+    publishedIdx2: uniqueIndex("publishedIdx2").on(solution.published),
   }),
 );
 export const solutionRelations = relations(solution, ({ one, many }) => ({
@@ -93,7 +97,8 @@ export type UpdateSolution = z.infer<typeof UpdateSolutionSchema>;
 
 export const PublishedSolutionSchema = SolutionSchema.extend({
   target_quest_id: z.string(),
-  title:z.string()
+  title: z.string(),
 });
+
 
 export type PublishedSolution = z.infer<typeof PublishedSolutionSchema>;
